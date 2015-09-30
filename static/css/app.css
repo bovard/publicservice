@@ -1,0 +1,23 @@
+.glyphicon.green {
+    color: #2fa031;
+}
+
+.glyphicon.orange {
+    color: #cbab45;
+}
+
+.glyphicon.red {
+    color: #c04644;
+}
+
+.green-background {
+    background-color: #dff0d8;
+}
+
+.orange-background {
+    background-color: #fcf8e3;
+}
+
+.red-background {
+    background-color: #f2dede;
+}
