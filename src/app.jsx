@@ -1,12 +1,14 @@
-var Router = ReactRouter;
-var DefaultRoute = Router.DefaultRoute;
-var Link = Router.Link;
-var Route = Router.Route;
-var RouteHandler = Router.RouteHandler;
+var React = require('react');
 
+var ReactBootstrap = require('react-bootstrap');
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 var NavItem = ReactBootstrap.NavItem;
+
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+var Link = ReactRouter.Link;
 
 var Header = React.createClass({
     render: function() {
@@ -48,15 +50,13 @@ var Incidents = React.createClass({
     }
 });
 
-var routes = (
-    <Route name="app" path="/" handler={StatDash}>
-        <Route name="dashboard" handler={StatDash}/>
-        <Route name="incidents" handler={Incidents}/>
-        <Route name="admin" handler={Admin}/>
-        <DefaultRoute handler={StatDash}/>
-    </Route>
+React.render((
+    <Router>
+        <Route path="/" component={StatDash}>
+            <Route path="/dashboard" component={StatDash} />
+            <Route path="/incidents" component={Incidents} />
+            <Route path="/admin" component={Admin} />
+        </Route>
+    </Router>
+    ), document.getElementById('main')
 );
-
-Router.run(routes, function (Handler) {
-    React.render(<Handler/>, document.getElementById('main'));
-});
