@@ -38266,17 +38266,56 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":304}],432:[function(require,module,exports){
-var React = require('react');
-
-var ReactBootstrap = require('react-bootstrap');
-var Navbar = ReactBootstrap.Navbar;
-var Nav = ReactBootstrap.Nav;
-var NavItem = ReactBootstrap.NavItem;
+React = require('react');
+ReactBootstrap = require('react-bootstrap');
 
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var Link = ReactRouter.Link;
+
+Header = require('./components/Header.jsx');
+var Admin = require('./components/Admin.jsx');
+var Dashboard = require('./components/Dashboard.jsx');
+var Incidents = require('./components/Incidents.jsx');
+
+React.render((
+    React.createElement(Router, null, 
+        React.createElement(Route, {path: "/", component: Dashboard}, 
+            React.createElement(Route, {path: "/dashboard", component: Dashboard}), 
+            React.createElement(Route, {path: "/incidents", component: Incidents}), 
+            React.createElement(Route, {path: "/admin", component: Admin})
+        )
+    )
+    ), document.getElementById('main')
+);
+
+},{"./components/Admin.jsx":433,"./components/Dashboard.jsx":434,"./components/Header.jsx":435,"./components/Incidents.jsx":436,"react":431,"react-bootstrap":73,"react-router":250}],433:[function(require,module,exports){
+var Admin = React.createClass({displayName: "Admin",
+    render: function() {
+        return (
+            React.createElement(Header, null)
+        );
+    }
+});
+
+module.exports = Admin;
+
+},{}],434:[function(require,module,exports){
+var Dashboard = React.createClass({displayName: "Dashboard",
+    render: function() {
+        return (
+            React.createElement(Header, null)
+        );
+    }
+});
+
+module.exports = Dashboard;
+
+},{}],435:[function(require,module,exports){
+var Navbar = ReactBootstrap.Navbar;
+var Nav = ReactBootstrap.Nav;
+var NavItem = ReactBootstrap.NavItem;
 
 var Header = React.createClass({displayName: "Header",
     render: function() {
@@ -38294,22 +38333,9 @@ var Header = React.createClass({displayName: "Header",
     }
 });
 
-var StatDash = React.createClass({displayName: "StatDash",
-    render: function() {
-        return (
-            React.createElement(Header, null)
-        );
-    }
-});
+module.exports = Header;
 
-var Admin = React.createClass({displayName: "Admin",
-    render: function() {
-        return (
-            React.createElement(Header, null)
-        );
-    }
-});
-
+},{}],436:[function(require,module,exports){
 var Incidents = React.createClass({displayName: "Incidents",
     render: function() {
         return (
@@ -38318,15 +38344,6 @@ var Incidents = React.createClass({displayName: "Incidents",
     }
 });
 
-React.render((
-    React.createElement(Router, null, 
-        React.createElement(Route, {path: "/", component: StatDash}, 
-            React.createElement(Route, {path: "/dashboard", component: StatDash}), 
-            React.createElement(Route, {path: "/incidents", component: Incidents}), 
-            React.createElement(Route, {path: "/admin", component: Admin})
-        )
-    )
-    ), document.getElementById('main')
-);
+module.exports = Incidents;
 
-},{"react":431,"react-bootstrap":73,"react-router":250}]},{},[432]);
+},{}]},{},[432]);
