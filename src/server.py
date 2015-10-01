@@ -5,6 +5,10 @@ __DIR__ = '/home/cdubz/PycharmProjects/StatDash/'
 
 class StatDash(object):
     @cherrypy.expose
+    def index(self):
+        return open(__DIR__ + '/templates/app.html')
+
+    @cherrypy.expose
     def mockup(self):
         return open(__DIR__ + '/templates/mockup.html')
 
@@ -21,5 +25,5 @@ if __name__ == '__main__':
         },
     }
 
-    mockup = StatDash()
-    cherrypy.quickstart(mockup, '/', conf)
+    app = StatDash()
+    cherrypy.quickstart(app, '/', conf)
