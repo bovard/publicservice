@@ -21,3 +21,12 @@ gulp.task('default', ["browactify", "watch"]);
 gulp.on('error', function(){
     console.log('error');
 });
+
+gulp.task('mockup', function(){
+    var b = browserify();
+    b.transform(reactify);
+    b.add('./src/mockup.jsx');
+    return b.bundle()
+        .pipe(source('mockup.js'))
+        .pipe(gulp.dest('./static/js'));
+});
