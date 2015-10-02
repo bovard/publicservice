@@ -38275,26 +38275,29 @@ var Route = ReactRouter.Route;
 var Link = ReactRouter.Link;
 
 Header = require('./components/Header.jsx');
+var App = require('./components/App.jsx');
 var Admin = require('./components/Admin.jsx');
 var Dashboard = require('./components/Dashboard.jsx');
 var Incidents = require('./components/Incidents.jsx');
 
 React.render((
     React.createElement(Router, null, 
-        React.createElement(Route, {path: "/", component: Dashboard}, 
-            React.createElement(Route, {path: "/dashboard", component: Dashboard}), 
-            React.createElement(Route, {path: "/incidents", component: Incidents}), 
-            React.createElement(Route, {path: "/admin", component: Admin})
+        React.createElement(Route, {path: "/", component: App}, 
+            React.createElement(Route, {path: "dashboard", component: Dashboard}), 
+            React.createElement(Route, {path: "incidents", component: Incidents}), 
+            React.createElement(Route, {path: "admin", component: Admin})
         )
     )
     ), document.getElementById('main')
 );
 
-},{"./components/Admin.jsx":433,"./components/Dashboard.jsx":434,"./components/Header.jsx":435,"./components/Incidents.jsx":436,"react":431,"react-bootstrap":73,"react-router":250}],433:[function(require,module,exports){
+},{"./components/Admin.jsx":433,"./components/App.jsx":434,"./components/Dashboard.jsx":435,"./components/Header.jsx":436,"./components/Incidents.jsx":437,"react":431,"react-bootstrap":73,"react-router":250}],433:[function(require,module,exports){
 var Admin = React.createClass({displayName: "Admin",
     render: function() {
         return (
-            React.createElement(Header, null)
+            React.createElement("div", {id: "admin"}, 
+                React.createElement("p", null, "This is the Admin page.")
+            )
         );
     }
 });
@@ -38302,17 +38305,33 @@ var Admin = React.createClass({displayName: "Admin",
 module.exports = Admin;
 
 },{}],434:[function(require,module,exports){
+var App = React.createClass({displayName: "App",
+    render: function() {
+        return (
+            React.createElement("div", {id: "app"}, 
+                React.createElement(Header, null), 
+                this.props.children
+            )
+        );
+    }
+});
+
+module.exports = App;
+
+},{}],435:[function(require,module,exports){
 var Dashboard = React.createClass({displayName: "Dashboard",
     render: function() {
         return (
-            React.createElement(Header, null)
+            React.createElement("div", {id: "dashboard"}, 
+                React.createElement("p", null, "This is the Dashboard page.")
+            )
         );
     }
 });
 
 module.exports = Dashboard;
 
-},{}],435:[function(require,module,exports){
+},{}],436:[function(require,module,exports){
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 var NavItem = ReactBootstrap.NavItem;
@@ -38335,11 +38354,13 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{}],436:[function(require,module,exports){
+},{}],437:[function(require,module,exports){
 var Incidents = React.createClass({displayName: "Incidents",
     render: function() {
         return (
-            React.createElement(Header, null)
+            React.createElement("div", {id: "incidents"}, 
+                React.createElement("p", null, "This is in the Incidents page.")
+            )
         );
     }
 });

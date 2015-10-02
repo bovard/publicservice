@@ -1,7 +1,9 @@
 var Dashboard = React.createClass({
     render: function() {
         return (
-            <Header />
+            <div id="dashboard">
+                <p>This is the Dashboard page.</p>
+            </div>
         );
     }
 });

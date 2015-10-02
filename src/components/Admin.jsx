@@ -1,7 +1,9 @@
 var Admin = React.createClass({
     render: function() {
         return (
-            <Header />
+            <div id="admin">
+                <p>This is the Admin page.</p>
+            </div>
         );
     }
 });
