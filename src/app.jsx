@@ -1,5 +1,7 @@
+$ = require('jquery');
 React = require('react');
 ReactBootstrap = require('react-bootstrap');
+Moment = require('moment');
 
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;

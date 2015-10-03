@@ -19,7 +19,8 @@ class ServicesREST(object):
         pass
 
     @cherrypy.tools.accept(media='text/plain')
-    @cherrypy.tools.json_out()
+    # TODO Look in to using json_out() correctly.
+    # @cherrypy.tools.json_out()
     def GET(self):
         db = cherrypy.thread_data.db
         services = db.get_services()

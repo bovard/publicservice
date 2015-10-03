@@ -3,7 +3,9 @@ var App = React.createClass({
         return (
             <div id="app">
                 <Header />
-                {this.props.children}
+                <div className="table-responsive container">
+                    {this.props.children}
+                </div>
             </div>
         );
     }
