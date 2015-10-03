@@ -1,7 +1,7 @@
+import os
 import cherrypy
 
-__DIR__ = '/home/cdubz/PycharmProjects/StatDash/'
-
+__DIR__ = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
 class StatDash(object):
     @cherrypy.expose
