@@ -1,5 +1,6 @@
 import sqlite3
 from functools import wraps
+from threading import RLock
 
 from service import Service
 from incident import Incident
@@ -10,8 +11,9 @@ def commitandrollback(f):
     """
     @wraps(f)
     def wrapper(self, *args, **kwargs):
-        with self._db:  # Auto commit and rollback on exception
-            return f(self, self._db.cursor(), *args, **kwargs)
+        with self._lock:  # Threading lock
+            with self._db:  # Auto commit and rollback on exception
+                return f(self, self._db.cursor(), *args, **kwargs)
     return wrapper
 
 
@@ -21,6 +23,7 @@ class Db(object):
     This will check for an existing SQLite3 database or initiate a new one."""
 
     def __init__(self, dbfile):
+        self._lock = RLock()
         self._db = sqlite3.connect(dbfile)
         c = self._db.cursor()
 
@@ -28,6 +31,8 @@ class Db(object):
             c.execute("SELECT rowid FROM service LIMIT 1")
         except sqlite3.OperationalError:
             self.create_tables()
+        finally:
+            c.close()
 
     @commitandrollback
     def create_tables(self, c):

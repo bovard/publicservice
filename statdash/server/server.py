@@ -1,37 +1,21 @@
 import os
 import cherrypy
-
 from database import Db
+
+from dashboard import Dashboard
+from api import API
 
 __DIR__ = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
 
-class StatDash(object):
+def connectdb(thread_index):
+    cherrypy.thread_data.db = Db(__DIR__ + '/database.sqlite3')
 
-    def __init__(self):
-        self.db = Db(__DIR__ + '/database.sqlite3')
+# Tell CherryPy to call "connectdb" for each thread, when it starts up
+cherrypy.engine.subscribe('start_thread', connectdb)
 
-    @cherrypy.expose
-    def index(self):
-        return open(__DIR__ + '/templates/app.html')
+Dashboard(__DIR__)
+API()
 
-
-    @cherrypy.expose
-    def mockup(self):
-        return open(__DIR__ + '/templates/mockup.html')
-
-
-if __name__ == '__main__':
-    conf = {
-        '/': {
-            'tools.sessions.on': True,
-            'tools.staticdir.root': __DIR__
-        },
-        '/static': {
-            'tools.staticdir.on': True,
-            'tools.staticdir.dir': './static'
-        },
-    }
-
-    app = StatDash()
-    cherrypy.quickstart(app, '/', conf)
+cherrypy.engine.start()
+cherrypy.engine.block()
