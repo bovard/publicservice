@@ -1,6 +1,18 @@
 import sqlite3
+from functools import wraps
 
 from service import Service
+from incident import Incident
+
+
+def commitandrollback(f):
+    """Adds db_cursor() to f call and executes commit and rollback
+    """
+    @wraps(f)
+    def wrapper(self, *args, **kwargs):
+        with self._db:  # Auto commit and rollback on exception
+            return f(self, self._db.cursor(), *args, **kwargs)
+    return wrapper
 
 
 class Db(object):
@@ -17,10 +29,10 @@ class Db(object):
         except sqlite3.OperationalError:
             self.create_tables()
 
-    def create_tables(self):
+    @commitandrollback
+    def create_tables(self, c):
         """Creates tables for a new database.
         """
-        c = self._db.cursor()
         c.execute('''
                     CREATE TABLE service
                     (name TEXT NOT NULL,
@@ -30,7 +42,7 @@ class Db(object):
         c.execute('''
                     CREATE TABLE incident
                     (servicerowid INTEGER,
-                    subject TEXT NOT NULL,
+                    title TEXT NOT NULL,
                     opened INTEGER NOT NULL,
                     closed INTEGER DEFAULT NULL,
                     FOREIGN KEY(servicerowid) REFERENCES service(rowid) ON DELETE CASCADE)
@@ -45,26 +57,50 @@ class Db(object):
                     FOREIGN KEY(incidentrowid) REFERENCES incident(rowid) ON DELETE CASCADE)
                   ''')
 
-    def add_service(self, name):
+    # Service methods
+
+    @commitandrollback
+    def add_service(self, c, service):
         """Adds a new service to the database.
         """
-        c = self._db.cursor()
-        c.execute("INSERT OR REPLACE INTO service(name) VALUES (?)", (name,))
+        c.execute("INSERT OR REPLACE INTO service(name) VALUES (?)", (service.name,))
 
-    def disable_service(self, service):
+    @commitandrollback
+    def disable_service(self, c, service):
         """Disables a service in the database.
         """
-        c = self._db.cursor()
         c.execute("INSERT OR REPLACE INTO service(name) VALUES (?)", (service.rowid,))
 
-    def _get_services(self):
-        c = self._db.cursor()
-        return c.execute("SELECT name, enabled FROM service")
+    @commitandrollback
+    def _get_services(self, c):
+        return c.execute("SELECT rowid, name, enabled FROM service")
 
     def get_services(self):
         """Retrieve an array of all services in the database.
         """
         services = []
-        for name, enabled in self._get_services():
-            services.append(Service(name, enabled))
+        for rowid, name, enabled in self._get_services():
+            services.append(Service(rowid, name, enabled))
         return services
+
+    # Incident methods
+
+    @commitandrollback
+    def add_incident(self, c, service, incident):
+        """Adds a new incident to the database.
+        """
+        c.execute("INSERT OR REPLACE INTO incident(servicerowid, title, opened, closed)"
+                  "VALUES (?, ?, ?, ?)", (service.rowid, incident.title, incident.opened, incident.closed))
+
+    @commitandrollback
+    def _get_incidents(self, c, service):
+        return c.execute("SELECT rowid, servicerowid, title, opened, closed FROM incident "
+                         "WHERE servicerowid = ?", (service.rowid,))
+
+    def get_incidents(self, service):
+        """Retrieve an array of all incidents for a service.
+        """
+        incidents = []
+        for rowid, servicerowid, title, opened, closed in self._get_incidents(service):
+            incidents.append(Incident(rowid, servicerowid, title, opened, closed))
+        return incidents
