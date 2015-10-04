@@ -5,7 +5,7 @@ var Dashboard = React.createClass({
         return (
             <div id="dashboard">
                 <h1>Dashboard</h1>
-                <ServicesTable url="/api/services" pollInterval={60000} />
+                <ServicesTable url="/api/service" pollInterval={60000} />
             </div>
         );
     }

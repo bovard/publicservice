@@ -50738,7 +50738,7 @@ var Dashboard = React.createClass({displayName: "Dashboard",
         return (
             React.createElement("div", {id: "dashboard"}, 
                 React.createElement("h1", null, "Dashboard"), 
-                React.createElement(ServicesTable, {url: "/api/services", pollInterval: 60000})
+                React.createElement(ServicesTable, {url: "/api/service", pollInterval: 60000})
             )
         );
     }

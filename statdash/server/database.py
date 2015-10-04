@@ -69,6 +69,7 @@ class Db(object):
         """Adds a new service to the database.
         """
         c.execute("INSERT OR REPLACE INTO service(name) VALUES (?)", (service.name,))
+        return c.lastrowid
 
     @commitandrollback
     def disable_service(self, c, service):

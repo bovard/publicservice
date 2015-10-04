@@ -1,6 +1,7 @@
 import cherrypy
 import json
 
+from service import Service
 
 def getdict(obj):
     """Returns an object's __dict__ (used to traverse a list of objects for json.dumps())
@@ -10,7 +11,7 @@ def getdict(obj):
     return obj
 
 
-class ServicesREST(object):
+class ServiceREST(object):
     """Handler for REST operations on /services
     """
     exposed = True
@@ -25,6 +26,12 @@ class ServicesREST(object):
         db = cherrypy.thread_data.db
         services = db.get_services()
         return json.dumps(services, default=getdict)
+
+    def POST(self, name):
+        db = cherrypy.thread_data.db
+        rowid = db.add_service(Service(None, name, 1))
+        return json.dumps({'rowid': rowid})
+
 
 
 class API(object):
@@ -42,5 +49,5 @@ class API(object):
             },
         }
 
-        self.services = ServicesREST()
+        self.service = ServiceREST()
         cherrypy.tree.mount(self, '/api', conf)
