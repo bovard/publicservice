@@ -50702,11 +50702,101 @@ React.render((
 );
 
 },{"./components/Admin.jsx":435,"./components/App.jsx":436,"./components/Dashboard.jsx":437,"./components/Header.jsx":438,"./components/Incidents.jsx":439,"jquery":2,"moment":3,"react":433,"react-bootstrap":75,"react-router":252}],435:[function(require,module,exports){
+var Input = ReactBootstrap.Input;
+var ButtonInput = ReactBootstrap.ButtonInput;
+var Alert = ReactBootstrap.Alert;
+
+var AlertBox = React.createClass({displayName: "AlertBox",
+    getInitialState: function() {
+        return {
+            alertVisible: false
+        };
+    },
+
+    handleAlertDismiss: function() {
+        this.setState({alertVisible: false});
+    },
+
+    componentWillReceiveProps: function() {
+        this.setState({alertVisible: true});
+    },
+
+    render: function() {
+        if (this.state.alertVisible) {
+            return (
+                React.createElement(Alert, {bsStyle: this.props.style, onDismiss: this.handleAlertDismiss, dismissAfter: 10000}, 
+                    React.createElement("p", null, this.props.text)
+                )
+            );
+        }
+        else {
+            return React.createElement("div", {id: "alert-ph"});
+        }
+    }
+});
+
+var ServiceAddForm = React.createClass({displayName: "ServiceAddForm",
+
+    addAlertBox: function() {
+        if (this.state.status) {
+            var text = this.state.text;
+            var bsStyle = this.state.status;
+            return (
+                React.createElement(AlertBox, {text: text, style: bsStyle})
+            );
+        }
+    },
+
+    handleSubmit: function(e) {
+        e.preventDefault();
+        var name = React.findDOMNode(this.refs.name.refs.input).value.trim();
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            data: {name: name},
+            success: function() {
+                this.setState({
+                    style: "success",
+                    text: "New service added!"
+                });
+            }.bind(this),
+            error: function(xhr, status, err) {
+                this.setState({
+                    style: "danger",
+                    text: "Error! Check console log..."
+                });
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+
+    getInitialState: function() {
+        return {
+            style: '',
+            text: ''
+        };
+    },
+
+    render: function() {
+        return (
+            React.createElement("form", {className: "service-add-form", onSubmit: this.handleSubmit}, 
+                "/* TODO: reset these state values somehow after X time? */", 
+                React.createElement(AlertBox, {style: this.state.style, text: this.state.text}), 
+                React.createElement(Input, {type: "text", label: "Service Name", ref: "name"}), 
+                React.createElement(ButtonInput, {type: "submit", value: "Add Service"})
+            )
+        );
+    }
+});
+
 var Admin = React.createClass({displayName: "Admin",
     render: function() {
         return (
             React.createElement("div", {id: "admin"}, 
-                React.createElement("p", null, "This is the Admin page.")
+                React.createElement("h1", null, "Services"), 
+                React.createElement("h2", null, "Add Service"), 
+                React.createElement(ServiceAddForm, {url: "/api/service"})
             )
         );
     }
@@ -50830,7 +50920,11 @@ var ServicesTable = React.createClass({displayName: "ServicesTable",
 
     componentDidMount: function() {
         this.getServices();
-        setInterval(this.getServices, this.props.pollInterval);
+        this.servicesTableRefreshId = setInterval(this.getServices, this.props.pollInterval);
+    },
+
+    componentWillUnmount: function() {
+        clearInterval(this.servicesTableRefreshId);
     },
 
     render: function() {

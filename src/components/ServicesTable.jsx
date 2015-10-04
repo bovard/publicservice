@@ -45,7 +45,11 @@ var ServicesTable = React.createClass({
 
     componentDidMount: function() {
         this.getServices();
-        setInterval(this.getServices, this.props.pollInterval);
+        this.servicesTableRefreshId = setInterval(this.getServices, this.props.pollInterval);
+    },
+
+    componentWillUnmount: function() {
+        clearInterval(this.servicesTableRefreshId);
     },
 
     render: function() {
