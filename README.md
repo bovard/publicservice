@@ -18,7 +18,7 @@ Public Service will be a customizable service status dashboard and incident trac
 ## Development Requirements
 
 * ```npm install```
-* See ```package.json```
+* ```pip install -Ur requirements.txt```
 
 ## TODO
 
