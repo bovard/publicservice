@@ -50731,81 +50731,7 @@ var App = React.createClass({displayName: "App",
 module.exports = App;
 
 },{}],437:[function(require,module,exports){
-var Table = ReactBootstrap.Table;
-var Glyphicon = ReactBootstrap.Glyphicon;
-
-var ServicesTableRows = React.createClass({displayName: "ServicesTableRows",
-    render: function() {
-        var tableRows = this.props.services.map(function (service) {
-            return (
-                React.createElement("tr", null, 
-                    React.createElement("td", null, React.createElement(Glyphicon, {glyph: "ok-sign", className: "green"}), " ", service.name), 
-                    React.createElement("td", {className: "green-background"}), 
-                    React.createElement("td", {className: "green-background"}), 
-                    React.createElement("td", {className: "green-background"}), 
-                    React.createElement("td", {className: "green-background"}), 
-                    React.createElement("td", {className: "green-background"}), 
-                    React.createElement("td", {className: "green-background"}), 
-                    React.createElement("td", {className: "green-background"})
-                )
-            );
-        });
-
-        return (
-            React.createElement("tbody", null, 
-                tableRows
-            )
-        );
-    }
-});
-
-var ServicesTable = React.createClass({displayName: "ServicesTable",
-    getServices: function() {
-        $.ajax({
-            url: this.props.url,
-            dataType: 'json',
-            cache: true,
-            success: function(data) {
-                this.setState({services: data});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
-    },
-
-    getInitialState: function() {
-        return {services: []};
-    },
-
-    componentDidMount: function() {
-        this.getServices();
-        setInterval(this.getServices, this.props.pollInterval);
-    },
-
-    render: function() {
-        var headers = ["Service"];
-        var d = Moment();
-
-        for (var i = 0; i < 7; i++) {
-            headers.push(d.format("M/D/YY"));
-            d.subtract(1, "days");
-        }
-
-        return (
-            React.createElement(Table, {bordered: true, condensed: true, hover: true}, 
-                React.createElement("thead", null, 
-                    React.createElement("tr", null, 
-                        headers.map(function(text){
-                            return React.createElement("th", null, text)
-                        })
-                    )
-                ), 
-                React.createElement(ServicesTableRows, {services: this.state.services})
-            )
-        );
-    }
-});
+var ServicesTable = require('./ServicesTable.jsx');
 
 var Dashboard = React.createClass({displayName: "Dashboard",
     render: function() {
@@ -50820,7 +50746,7 @@ var Dashboard = React.createClass({displayName: "Dashboard",
 
 module.exports = Dashboard;
 
-},{}],438:[function(require,module,exports){
+},{"./ServicesTable.jsx":440}],438:[function(require,module,exports){
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 var NavItem = ReactBootstrap.NavItem;
@@ -50855,5 +50781,86 @@ var Incidents = React.createClass({displayName: "Incidents",
 });
 
 module.exports = Incidents;
+
+},{}],440:[function(require,module,exports){
+var Table = ReactBootstrap.Table;
+var Glyphicon = ReactBootstrap.Glyphicon;
+
+var ServicesTableRowWrapper = React.createClass({displayName: "ServicesTableRowWrapper",
+    render: function() {
+        return (
+            React.createElement("tr", null, 
+                React.createElement("td", null, React.createElement(Glyphicon, {glyph: "ok-sign", className: "green"}), " ", this.props.service.name), 
+                React.createElement("td", {className: "green-background"}), 
+                React.createElement("td", {className: "green-background"}), 
+                React.createElement("td", {className: "green-background"}), 
+                React.createElement("td", {className: "green-background"}), 
+                React.createElement("td", {className: "green-background"}), 
+                React.createElement("td", {className: "green-background"}), 
+                React.createElement("td", {className: "green-background"})
+            )
+        );
+    }
+});
+
+var ServicesTableHeaderWrapper = React.createClass({displayName: "ServicesTableHeaderWrapper",
+    render: function() {
+        return React.createElement("th", null, this.props.header);
+    }
+});
+
+var ServicesTable = React.createClass({displayName: "ServicesTable",
+    getServices: function() {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: true,
+            success: function(data) {
+                this.setState({services: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+
+    getInitialState: function() {
+        return {services: []};
+    },
+
+    componentDidMount: function() {
+        this.getServices();
+        setInterval(this.getServices, this.props.pollInterval);
+    },
+
+    render: function() {
+        var headers = [{key: -1, value: "Service"}];
+        var d = Moment();
+
+        for (var i = 0; i < 7; i++) {
+            headers.push({key: i, value: d.format("M/D/YY")});
+            d.subtract(1, "days");
+        }
+
+        return (
+            React.createElement(Table, {bordered: true, condensed: true, hover: true}, 
+                React.createElement("thead", null, 
+                    React.createElement("tr", null, 
+                        headers.map(function(header){
+                            return React.createElement(ServicesTableHeaderWrapper, {key: header.key, header: header.value})
+                        })
+                    )
+                ), 
+                React.createElement("tbody", null, 
+                    this.state.services.map(function (service) {
+                        return React.createElement(ServicesTableRowWrapper, {key: service.rowid, service: service});
+                    })
+                )
+            )
+        );
+    }
+});
+
+module.exports = ServicesTable;
 
 },{}]},{},[434]);
