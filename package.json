@@ -1,0 +1,30 @@
+{
+  "name": "publicservice",
+  "version": "0.0.1",
+  "description": "A simple webapp for tracking status",
+  "main": "src/app.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdubz/publicservice"
+  },
+  "keywords": [
+    "status"
+  ],
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/cdubz/publicservice"
+  },
+  "homepage": "https://github.com/cdubz/publicservice",
+  "devDependencies": {
+    "jquery": "~2.1.4",
+    "moment": "~2.10.6",
+    "vinyl-source-stream": "~1.1.0",
+    "react": "~0.13.3",
+    "react-bootstrap": "~0.25.2",
+    "react-router": "~1.0.0-rc1",
+    "reactify": "~1.1.1",
+    "browserify": "~11.2.0",
+    "gulp": "~3.9.0"
+  }
+}

@@ -17,8 +17,8 @@ Public Service will be a customizable service status dashboard and incident trac
 
 ## Development Requirements
 
-* See ```gulpfile.js```
-* See ```src/app.jsx```
+* ```npm install```
+* See ```package.json```
 
 ## TODO
 
