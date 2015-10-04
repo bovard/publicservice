@@ -25,8 +25,8 @@ Public Service will be a customizable service status dashboard and incident trac
 * Unit testing
 * Validation (everywhere!)
 * Remaining API methods
-    * /api/service/<service-id> (~~GET~~, PATCH, DELETE)
+    * /api/service/\<service-id\> (~~GET~~, PATCH, DELETE)
     * /api/incident (GET, POST)
-    * /api/incident/<incident-id> (GET, PATCH, DELETE)
+    * /api/incident/\<incident-id\> (GET, PATCH, DELETE)
 * Handling for incident updates
 * Remaining React components
