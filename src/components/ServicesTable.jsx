@@ -53,30 +53,35 @@ var ServicesTable = React.createClass({
     },
 
     render: function() {
-        var headers = [{key: -1, value: "Service"}];
-        var d = Moment();
+        if (this.state.services.length > 0) {
+            var headers = [{key: -1, value: "Service"}];
+            var d = Moment();
 
-        for (var i = 0; i < 7; i++) {
-            headers.push({key: i, value: d.format("M/D/YY")});
-            d.subtract(1, "days");
-        }
+            for (var i = 0; i < 7; i++) {
+                headers.push({key: i, value: d.format("M/D/YY")});
+                d.subtract(1, "days");
+            }
 
-        return (
-            <Table bordered condensed hover>
-                <thead>
+            return (
+                <Table bordered condensed hover>
+                    <thead>
                     <tr>
-                        {headers.map(function(header){
-                            return <ServicesTableHeaderWrapper key={header.key} header={header.value} />
+                        {headers.map(function (header) {
+                            return <ServicesTableHeaderWrapper key={header.key} header={header.value}/>
                         })}
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {this.state.services.map(function (service) {
                         return <ServicesTableRowWrapper key={service.rowid} service={service}/>;
                     })}
-                </tbody>
-            </Table>
-        );
+                    </tbody>
+                </Table>
+            );
+        }
+        else {
+            return <p>No services have been added.</p>
+        }
     }
 });
 

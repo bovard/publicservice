@@ -50778,10 +50778,10 @@ var ServiceAddForm = React.createClass({displayName: "ServiceAddForm",
         };
     },
 
+    // TODO: reset the AlertBox state values somehow after X time?
     render: function() {
         return (
             React.createElement("form", {className: "service-add-form", onSubmit: this.handleSubmit}, 
-                "/* TODO: reset these state values somehow after X time? */", 
                 React.createElement(AlertBox, {style: this.state.style, text: this.state.text}), 
                 React.createElement(Input, {type: "text", label: "Service Name", ref: "name"}), 
                 React.createElement(ButtonInput, {type: "submit", value: "Add Service"})
@@ -50845,7 +50845,7 @@ var Header = React.createClass({displayName: "Header",
     render: function() {
         return (
             React.createElement("div", {className: "header"}, 
-                React.createElement(Navbar, {brand: "Stat‒", inverse: true, toggleNavKey: 0}, 
+                React.createElement(Navbar, {brand: "Public Service", inverse: true, toggleNavKey: 0}, 
                     React.createElement(Nav, {right: true, eventKey: 0}, 
                         React.createElement(NavItem, {eventKey: 1, href: "#/dashboard"}, "Dashboard"), 
                         React.createElement(NavItem, {eventKey: 2, href: "#/incidents"}, "Incidents"), 
@@ -50928,30 +50928,35 @@ var ServicesTable = React.createClass({displayName: "ServicesTable",
     },
 
     render: function() {
-        var headers = [{key: -1, value: "Service"}];
-        var d = Moment();
+        if (this.state.services.length > 0) {
+            var headers = [{key: -1, value: "Service"}];
+            var d = Moment();
 
-        for (var i = 0; i < 7; i++) {
-            headers.push({key: i, value: d.format("M/D/YY")});
-            d.subtract(1, "days");
-        }
+            for (var i = 0; i < 7; i++) {
+                headers.push({key: i, value: d.format("M/D/YY")});
+                d.subtract(1, "days");
+            }
 
-        return (
-            React.createElement(Table, {bordered: true, condensed: true, hover: true}, 
-                React.createElement("thead", null, 
+            return (
+                React.createElement(Table, {bordered: true, condensed: true, hover: true}, 
+                    React.createElement("thead", null, 
                     React.createElement("tr", null, 
-                        headers.map(function(header){
+                        headers.map(function (header) {
                             return React.createElement(ServicesTableHeaderWrapper, {key: header.key, header: header.value})
                         })
                     )
-                ), 
-                React.createElement("tbody", null, 
+                    ), 
+                    React.createElement("tbody", null, 
                     this.state.services.map(function (service) {
                         return React.createElement(ServicesTableRowWrapper, {key: service.rowid, service: service});
                     })
+                    )
                 )
-            )
-        );
+            );
+        }
+        else {
+            return React.createElement("p", null, "No services have been added.")
+        }
     }
 });
 

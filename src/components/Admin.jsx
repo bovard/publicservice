@@ -74,10 +74,10 @@ var ServiceAddForm = React.createClass({
         };
     },
 
+    // TODO: reset the AlertBox state values somehow after X time?
     render: function() {
         return (
             <form className="service-add-form" onSubmit={this.handleSubmit}>
-                /* TODO: reset these state values somehow after X time? */
                 <AlertBox style={this.state.style} text={this.state.text} />
                 <Input type="text" label="Service Name" ref="name" />
                 <ButtonInput type="submit" value="Add Service" />
