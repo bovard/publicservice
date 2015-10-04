@@ -22,16 +22,19 @@ class ServiceREST(object):
     @cherrypy.tools.accept(media='text/plain')
     # TODO Look in to using json_out() correctly.
     # @cherrypy.tools.json_out()
-    def GET(self):
+    @cherrypy.popargs('rowid')
+    def GET(self, rowid=None):
         db = cherrypy.thread_data.db
-        services = db.get_services()
+        if rowid is None:
+            services = db.get_services()
+        else:
+            services = db.get_services(rowid)
         return json.dumps(services, default=getdict)
 
     def POST(self, name):
         db = cherrypy.thread_data.db
         rowid = db.add_service(Service(None, name, 1))
         return json.dumps({'rowid': rowid})
-
 
 
 class API(object):

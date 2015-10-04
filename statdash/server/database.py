@@ -78,14 +78,19 @@ class Db(object):
         c.execute("INSERT OR REPLACE INTO service(name) VALUES (?)", (service.rowid,))
 
     @commitandrollback
-    def _get_services(self, c):
-        return c.execute("SELECT rowid, name, enabled FROM service")
+    def _get_services(self, c, rowid=None):
+        query = "SELECT rowid, name, enabled FROM service"
+        args = []
+        if rowid is not None:
+            query += " WHERE rowid = ?"
+            args.append(rowid)
+        return c.execute(query, args)
 
-    def get_services(self):
+    def get_services(self, rowid=None):
         """Retrieve an array of all services in the database.
         """
         services = []
-        for rowid, name, enabled in self._get_services():
+        for rowid, name, enabled in self._get_services(rowid):
             services.append(Service(rowid, name, enabled))
         return services
 
